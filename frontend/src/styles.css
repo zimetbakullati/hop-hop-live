@@ -1,0 +1,138 @@
+:root {
+  font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  color: #111827;
+  background: #f3f4f6;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+}
+
+.container {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 1rem;
+}
+
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem;
+  background: #111827;
+  color: white;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.brand {
+  color: white;
+  text-decoration: none;
+  font-weight: 700;
+}
+
+.nav-links {
+  display: flex;
+  gap: 0.75rem;
+  align-items: center;
+}
+
+.nav-links a,
+.nav-links button {
+  color: white;
+  text-decoration: none;
+  background: none;
+  border: 0;
+  cursor: pointer;
+  font: inherit;
+}
+
+.page {
+  display: grid;
+  gap: 1rem;
+}
+
+.auth-page form,
+.page form {
+  display: grid;
+  gap: 0.75rem;
+}
+
+input,
+textarea,
+button {
+  padding: 0.65rem;
+  border-radius: 0.5rem;
+  border: 1px solid #d1d5db;
+  font: inherit;
+}
+
+button {
+  cursor: pointer;
+}
+
+.error {
+  color: #b91c1c;
+}
+
+.video-feed {
+  display: grid;
+  gap: 1rem;
+}
+
+.video-card {
+  background: white;
+  padding: 1rem;
+  border-radius: 0.75rem;
+  display: grid;
+  gap: 0.75rem;
+}
+
+.video-card video {
+  width: 100%;
+  border-radius: 0.75rem;
+  max-height: 420px;
+  background: black;
+}
+
+.meta {
+  color: #4b5563;
+}
+
+.comments {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 0.4rem;
+}
+
+.profile-stats {
+  display: flex;
+  gap: 1rem;
+}
+
+.profile-actions,
+.live-controls {
+  display: flex;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+}
+
+@media (max-width: 640px) {
+  .container {
+    padding: 0.75rem;
+  }
+
+  .navbar {
+    padding: 0.75rem;
+  }
+
+  .video-card {
+    padding: 0.75rem;
+  }
+}
