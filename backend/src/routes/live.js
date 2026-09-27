@@ -1,8 +1,8 @@
 const express = require('express');
 const auth = require('../middleware/auth');
+const { getLiveSession, setLiveSession, deleteLiveSession, listLiveSessions } = require('../liveSessions');
 
 const router = express.Router();
-const liveSessions = new Map();
 
 router.post('/start', auth, (req, res) => {
   const roomId = `${req.user.userId}-${Date.now()}`;
@@ -13,13 +13,13 @@ router.post('/start', auth, (req, res) => {
     startedAt: new Date().toISOString()
   };
 
-  liveSessions.set(roomId, payload);
+  setLiveSession(roomId, payload);
   req.io.emit('live:started', payload);
   res.status(201).json(payload);
 });
 
 router.post('/:roomId/end', auth, (req, res) => {
-  const session = liveSessions.get(req.params.roomId);
+  const session = getLiveSession(req.params.roomId);
   if (!session) {
     return res.status(404).json({ message: 'Live session not found' });
   }
@@ -28,13 +28,13 @@ router.post('/:roomId/end', auth, (req, res) => {
     return res.status(403).json({ message: 'Only the host can end this live stream' });
   }
 
-  liveSessions.delete(req.params.roomId);
+  deleteLiveSession(req.params.roomId);
   req.io.emit('live:ended', { roomId: req.params.roomId });
   res.json({ message: 'Live stream ended' });
 });
 
 router.get('/', (_req, res) => {
-  res.json(Array.from(liveSessions.values()));
+  res.json(listLiveSessions());
 });
 
 module.exports = router;

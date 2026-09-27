@@ -26,13 +26,13 @@ npm run install:all
 Backend:
 
 ```bash
-cp /home/runner/work/hop-hop-live/hop-hop-live/backend/.env.example /home/runner/work/hop-hop-live/hop-hop-live/backend/.env
+cp backend/.env.example backend/.env
 ```
 
 Frontend:
 
 ```bash
-cp /home/runner/work/hop-hop-live/hop-hop-live/frontend/.env.example /home/runner/work/hop-hop-live/hop-hop-live/frontend/.env
+cp frontend/.env.example frontend/.env
 ```
 
 Update values as needed.
@@ -72,7 +72,7 @@ Backend default URL: `http://localhost:5000`
 - `notification` - follow/like/comment events
 - `live:started` / `live:ended`
 - `live:join-room` / `live:leave-room`
-- `join:user` to subscribe to user-room notifications
+- connect with JWT auth token to subscribe to your user-room notifications
 
 ## Notes
 

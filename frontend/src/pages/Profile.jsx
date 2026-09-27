@@ -21,20 +21,30 @@ const Profile = () => {
 
   const follow = async () => {
     if (!auth.token) return;
-    await apiRequest(`/users/${id}/follow`, {
-      method: 'POST',
-      headers: { Authorization: 'Bearer ' + auth.token }
-    });
-    loadProfile();
+    try {
+      await apiRequest(`/users/${id}/follow`, {
+        method: 'POST',
+        headers: { Authorization: 'Bearer ' + auth.token }
+      });
+      setError('');
+      loadProfile();
+    } catch (err) {
+      setError(err.message);
+    }
   };
 
   const unfollow = async () => {
     if (!auth.token) return;
-    await apiRequest(`/users/${id}/unfollow`, {
-      method: 'POST',
-      headers: { Authorization: 'Bearer ' + auth.token }
-    });
-    loadProfile();
+    try {
+      await apiRequest(`/users/${id}/unfollow`, {
+        method: 'POST',
+        headers: { Authorization: 'Bearer ' + auth.token }
+      });
+      setError('');
+      loadProfile();
+    } catch (err) {
+      setError(err.message);
+    }
   };
 
   if (error) return <p className="error">{error}</p>;

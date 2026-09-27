@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { io } from 'socket.io-client';
 import { apiRequest } from '../api';
 import { useAuth } from '../context/AuthContext';
@@ -9,26 +9,23 @@ const Live = () => {
   const [notifications, setNotifications] = useState([]);
   const [title, setTitle] = useState('My Live Session');
 
-  const socket = useMemo(
-    () => io(import.meta.env.VITE_SOCKET_URL || 'http://localhost:5000', { autoConnect: true }),
-    []
-  );
+  const socketRef = useRef(null);
 
   useEffect(() => {
+    const socket = io(import.meta.env.VITE_SOCKET_URL || 'http://localhost:5000', {
+      autoConnect: true,
+      auth: auth.token ? { token: auth.token } : undefined
+    });
+    socketRef.current = socket;
+
     apiRequest('/live').then(setLiveSessions).catch(() => undefined);
 
-    socket.on('connect', () => {
-      if (auth.user?.id) {
-        socket.emit('join:user', auth.user.id);
-      }
-    });
-
     socket.on('notification', (notification) => {
-      setNotifications((prev) => [notification, ...prev].slice(0, 10));
+      setNotifications((prev) => [{ ...notification, _id: crypto.randomUUID() }, ...prev].slice(0, 10));
     });
 
     socket.on('live:started', (session) => {
-      setLiveSessions((prev) => [session, ...prev]);
+      setLiveSessions((prev) => [session, ...prev.filter((item) => item.roomId !== session.roomId)]);
     });
 
     socket.on('live:ended', ({ roomId }) => {
@@ -37,8 +34,9 @@ const Live = () => {
 
     return () => {
       socket.disconnect();
+      socketRef.current = null;
     };
-  }, [socket, auth.user?.id]);
+  }, [auth.token]);
 
   const startLive = async () => {
     if (!auth.token) return;
@@ -79,8 +77,10 @@ const Live = () => {
 
       <h2>Realtime notifications</h2>
       <ul>
-        {notifications.map((notification, index) => (
-          <li key={`${notification.type}-${index}`}>{notification.message}</li>
+        {notifications.map((notification) => (
+          <li key={notification._id}>
+            {notification.message}
+          </li>
         ))}
       </ul>
     </section>

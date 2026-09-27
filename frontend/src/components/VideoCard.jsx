@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { apiRequest } from '../api';
+import { apiRequest, ASSET_BASE_URL } from '../api';
 
 const VideoCard = ({ video, token }) => {
   const [commentText, setCommentText] = useState('');
@@ -32,7 +32,7 @@ const VideoCard = ({ video, token }) => {
       <h3>{video.title}</h3>
       <p>{video.description}</p>
       <p className="meta">By @{video.userId?.username || 'unknown'}</p>
-      <video controls src={`${import.meta.env.VITE_SOCKET_URL || 'http://localhost:5000'}${video.videoUrl}`} />
+      <video controls src={`${ASSET_BASE_URL}${video.videoUrl}`} />
       <div className="actions">
         <button onClick={handleLike} disabled={!token}>
           ❤️ {likesCount}
